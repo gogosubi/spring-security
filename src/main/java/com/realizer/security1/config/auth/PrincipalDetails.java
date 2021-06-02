@@ -27,14 +27,15 @@ public class PrincipalDetails implements UserDetails
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
 		Collection<GrantedAuthority> collect = new ArrayList();
-		collect.add(new GrantedAuthority() 
-		{	
-			@Override
-			public String getAuthority() {
-				// TODO Auto-generated method stub
-				return user.getRole();
-			}
-		});
+		collect.add(
+				new GrantedAuthority() 
+				{	
+					@Override
+					public String getAuthority() {
+						// TODO Auto-generated method stub
+						return user.getRole();
+					}
+				});
 		
 		// TODO Auto-generated method stub
 		return collect;

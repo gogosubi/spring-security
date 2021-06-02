@@ -1,6 +1,8 @@
 package com.realizer.security1.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,19 +30,19 @@ public class IndexController {
 	}
 	
 	@GetMapping("/user")
-	public String user()
+	public @ResponseBody String user()
 	{
 		return "user";
 	}
 	
 	@GetMapping("/manager")
-	public String manager()
+	public @ResponseBody String manager()
 	{
 		return "manager";
 	}
 	
 	@GetMapping("/admin")
-	public String admin()
+	public @ResponseBody String admin()
 	{
 		return "admin";
 	}
@@ -69,5 +71,21 @@ public class IndexController {
 		userRepository.save(user);
 		
 		return "redirect:/loginForm";
+	}
+	
+	// 단 건의 접근 권한 정보를 제허할 때 Secured 사용
+	@Secured("ROLE_ADMIN")
+	@GetMapping("/info")
+	public @ResponseBody String info()
+	{
+		return "개인정보";
+	}
+	
+	// 다 건의 접근 권한 정보를 제어할 때 PreAuthorize 사용
+	@PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+	@GetMapping("/data")
+	public @ResponseBody String data() 
+	{
+		return "데이터";
 	}
 }
