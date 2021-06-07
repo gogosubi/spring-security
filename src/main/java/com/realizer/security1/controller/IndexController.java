@@ -3,12 +3,16 @@ package com.realizer.security1.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.realizer.security1.config.auth.PrincipalDetails;
 import com.realizer.security1.model.User;
 import com.realizer.security1.repository.UserRepository;
 
@@ -20,6 +24,22 @@ public class IndexController {
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@GetMapping("/test/login")
+	public @ResponseBody String testLogin(Authentication authentication, @AuthenticationPrincipal PrincipalDetails principalDetails)
+	{
+		System.out.println(authentication.getName());
+		System.out.println(principalDetails.getUser());
+		return "Session 테스트";
+	}
+	
+	@GetMapping("/test/oAuthlogin")
+	public @ResponseBody String testOAuthLogin(Authentication authentication, @AuthenticationPrincipal OAuth2User oAuth2User)
+	{
+		System.out.println(authentication.getName());
+		System.out.println(oAuth2User.getAttributes());
+		return "OAuth Session 테스트";
+	}
 	
 	@GetMapping({"/", ""})
 	public String index()

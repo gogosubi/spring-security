@@ -1,5 +1,13 @@
 package com.realizer.security1.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+// 카카오톡인 경우
+// 1. 코드받기(인증)
+// 2. 엑세스토큰(권한)
+// 3. 사용자프로필 정보를 가져오고
+// 4. 그 정보를 토대로 회원가입을 자동 진행하기도 함
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.annotation.Secured;
@@ -11,12 +19,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.realizer.security1.config.oauth.PrincipalOauth2UserService;
+
 @Configuration
 // securedEnabled = true // 특정 함수에서 @Secured() 어노테이션을 이용하여 접근 권한 정보를 제어할 때(하나의 ROLE 정의) 
 // prePostEnabled = true // 특정 함수에서 @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')"), PostAuthroize 어노테이션을 이용하여 접근 권한 정보를 제어할 때(다수의 ROLE정의)
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
+	@Autowired
+	PrincipalOauth2UserService principalOauth2UserService;
+	
 	@Bean
 	public BCryptPasswordEncoder encodePwd()
 	{
@@ -43,7 +56,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 			.defaultSuccessUrl("/")
 			.and()					// OAuth로그인 설정
 			.oauth2Login()
-			.loginPage("/loginForm")
+			.loginPage("/loginForm") // 구글로그인이 완료된 후 후처리 필요함 TIP. 코드X, 엑세스토큰+사용자프로필정보 가져옴
+			.userInfoEndpoint() 
+			.userService(principalOauth2UserService)
 			;
 	}
 
