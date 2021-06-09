@@ -12,7 +12,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/security?serverTimezone=Asia/Seoul
     username: realizer
-    password: 
+    password: yuri1234 
     
   mvc:
     view:
@@ -31,8 +31,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 
-            client-secret: 
+            client-id: 553783202968-1edm74p5kl9vj3bn8ughbvl93734t0so.apps.googleusercontent.com
+            client-secret: ej8WFEgZJqnxxnbeAQUpfzsS
             scope:
             - email
             - profile
