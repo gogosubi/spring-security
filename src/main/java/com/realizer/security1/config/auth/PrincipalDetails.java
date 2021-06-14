@@ -23,9 +23,16 @@ import lombok.Data;
 public class PrincipalDetails implements UserDetails, OAuth2User 
 {
 	private User user;
+	
+	Map<String, Object> attributes;
 
 	public PrincipalDetails(User user) {
 		this.user = user;
+	}
+
+	public PrincipalDetails(User user, Map<String, Object> attributes) {
+		this.user = user;
+		this.attributes = attributes;
 	}
 
 	@Override
@@ -87,7 +94,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User
 	@Override
 	public Map<String, Object> getAttributes() {
 		// TODO Auto-generated method stub
-		return null;
+		return attributes;
 	}
 
 	@Override
